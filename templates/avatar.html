@@ -5,11 +5,11 @@
     <link href="https://fonts.cdnfonts.com/css/robot-reavers" rel="stylesheet">
     <link rel="stylesheet" href="static/styles.css">
     <title>Random Avatar Generator</title>
-    <!-- BEGIN SHAREAHOLIC CODE -->
-    <link rel="preload" href="https://cdn.shareaholic.net/assets/pub/shareaholic.js" as="script" />
-    <meta name="shareaholic:site_id" content="1c051ecba369321561b371e5b89056ee" />
-    <script data-cfasync="false" async src="https://cdn.shareaholic.net/assets/pub/shareaholic.js"></script>
-    <!-- END SHAREAHOLIC CODE -->
+        <!-- BEGIN SHAREAHOLIC CODE -->
+        <link rel="preload" href="https://cdn.shareaholic.net/assets/pub/shareaholic.js" as="script" />
+        <meta name="shareaholic:site_id" content="1c051ecba369321561b371e5b89056ee" />
+        <script data-cfasync="false" async src="https://cdn.shareaholic.net/assets/pub/shareaholic.js"></script>
+        <!-- END SHAREAHOLIC CODE -->
 </head>
 <body>
     <section class="layout">
@@ -24,22 +24,31 @@
         </div>
         <div class="body">
             <div class="container">
-
-                <img class="avatar" src="cache/{{ robohash }}.png"/>
+                <img class="avatar" src="cache/png/{{ robohash }}"/>
                 <img class="frame" src="static/frame2.png"/>
                 <h3 class="name">{{ robotName }}</h3>
             </div>
         </div>
         <div class="rightSide">
-            <form id="form2" method="post" action="/download">
-                <input type="submit" class="button2" value="Download" name="action2"
+            <form id="form2" method="post" action="">
+                <a class="a2" href="https://www.shareaholic.com/api/share/?v=1&apitype=1&apikey=c4673b3fd0d3c4b6c204344f37c9816b&service=twitter&title=Random%20Character%20Generator&link=cache/png/{{ robohash }}"target="_blank">Share</a>
+                <br>
+                <input type="submit" class="button2" value="Download PNG" name="action2"
                        onclick="document.getElementById('download_link').click(); return false;"/>
-                <a href="https://www.shareaholic.com/api/share/?v=1&apitype=1&apikey=c4673b3fd0d3c4b6c204344f37c9816b&service=twitter&title=Random%20Character%20Generator&link=cache/{{ robohash }}.png"target="_blank">Share</a>
+                <div class="dropdown">
+                    <button class="button3" onclick="return false;">Download As...</button>
+                    <div class="dropdown-content">
+                        <a href="cache/gif/{{ robohash }}" download="{{ robohash }}.gif">GIF</a>
+                        <a href="cache/jpg/{{ robohash }}" download="{{ robohash }}.jpg">JPEG/JPG</a>
+                        <a href="cache/pdf/{{ robohash }}" download="{{ robohash }}.pdf">PDF</a>
+                        <!--<a href="cache/png/{{ robohash }}" download="{{ robohash }}.pdf">PNG (default)</a>-->
+                    </div>
+                </div>
             </form>
         </div>
-        <!-- <div class="footer">Copyright &#169; {{ year }} Random Avatar Inc., All rights reserved.</div> -->
+        <!-- <div class="footer">Copyright &#169; {{ year }} Random Avatar Inc., All rights reserved.</div>-->
     </section>
-    <!-- hidden download link -->
-    <a id="download_link" href="cache/{{ robohash }}.png" download="{{ robohash }}.png" hidden>&nbsp;</a>
+    <!-- hidden default format (PNG) download link -->
+    <a id="download_link" href="cache/png/{{ robohash }}" download="{{ robohash }}.png" hidden>&nbsp;</a>
 </body>
 </html>

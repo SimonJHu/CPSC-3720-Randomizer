@@ -8,7 +8,7 @@ body {
 
 .layout {
   width: 99%;
-  height: 95vh;
+  height: 115vh;
 
   display: grid;
   grid:
@@ -49,17 +49,6 @@ body {
     transition: .3s;
 }
 
-.name {
-    font-family:  'Robot Reavers', sans-serif;
-    margin: 0;
-    padding-top: 20px;
-    text-align: center;
-    font-size: 30px;
-    color: white;
-    text-shadow: 3px 4px rgba(black, .8);
-    transition: .3s;
-}
-
 .leftSide {
     grid-area: leftSide;
     display: flex;
@@ -79,12 +68,13 @@ body {
 }
 .footer {
     grid-area: footer;
-    margin-top: auto;
+    margin-top: 50px;
     margin-left: auto;
     margin-bottom: 10px;
     margin-right: auto;
+    font-size: 11px;
     font-family:  'Robotaur', sans-serif;
-    color: white;
+    color: rgb(168, 168, 168);
     /*border: 1px yellow solid;*/
 }
 
@@ -113,6 +103,7 @@ input {
 .container {
     /* Center vertically and horizontally */
     position: absolute;
+    margin-top: 40px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -131,11 +122,53 @@ input {
     /*border: 1px green solid;*/
 }
 
+.a2 {
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-left: 0%;
+    padding: 0px 5px;
+    height: 43px;
+    font-size: 24px;
+    font-family: 'Robot Reavers', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: rgb(9, 118, 112);
+    border: 2px solid #6c0a4e;
+    border-radius: 0%;
+    box-shadow: 0 7px rgb(14, 7, 54);
+}
+
+.a2:hover {
+    background-color: rgb(11, 89, 85)
+}
+
+.a2:active {
+    background-color: rgb(11, 89, 85);
+    box-shadow: 0 5px rgb(14, 7, 54);
+    transform: translateY(4px);
+}
+
+.name {
+    font-family:  'Robot Reavers', sans-serif;
+    margin: 0;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    text-shadow: 3px 4px rgba(black, .8);
+    transition: .3s;
+}
+
 .button1 {
     display: inline-block;
     display: flex;
     align-items: center;
-    padding: 20px 30px;
+    padding: 18px 28px;
     font-size: 35px;
     font-family: 'Robot Reavers', sans-serif;
     cursor: pointer;
@@ -163,7 +196,8 @@ input {
     display: inline-block;
     display: flex;
     align-items: center;
-    padding: 6px 25px;
+    margin-top: 10px;
+    padding: 8px 25px;
     height: 43px;
     font-size: 23px;
     font-family: 'Robot Reavers', sans-serif;
@@ -176,7 +210,6 @@ input {
     border: 2px solid #6c0a4e;
     border-radius: 0%;
     box-shadow: 0 7px rgb(14, 7, 54);
-    margin-top: 27px;
 }
 
 .button2:hover {
@@ -189,11 +222,13 @@ input {
     transform: translateY(4px);
 }
 
-a {
+.button3 {
     display: inline-block;
+    display: flex;
     align-items: center;
-    padding: 6px 25px;
-    height: 27px;
+    margin-top: 20px;
+    padding: 8px 25px;
+    height: 43px;
     font-size: 23px;
     font-family: 'Robot Reavers', sans-serif;
     cursor: pointer;
@@ -205,15 +240,48 @@ a {
     border: 2px solid #6c0a4e;
     border-radius: 0%;
     box-shadow: 0 7px rgb(14, 7, 54);
-    margin-top: 27px;
 }
 
-a:hover {
+.button3:hover {
     background-color: rgb(11, 89, 85)
 }
 
-a:active {
+.button3:active {
     background-color: rgb(11, 89, 85);
     box-shadow: 0 5px rgb(14, 7, 54);
     transform: translateY(4px);
+}
+
+
+/* "Download As..." dropdown stuff */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(168, 168, 168);
+    font-size: 18px;
+    font-family: 'Robot Reavers', sans-serif;
+    min-width: 260px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }

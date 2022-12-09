@@ -47,5 +47,4 @@ urllib3==1.26.12
 wcwidth==0.1.9
 websocket-client==0.59.0
 Werkzeug~=2.0.0
-requests
-cloudmersive_convert_api_client
+cloudmersive-convert-api-client==3.2.5

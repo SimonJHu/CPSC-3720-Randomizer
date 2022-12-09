@@ -1,58 +1,76 @@
-from dotenv import find_dotenv, load_dotenv
-from flask import Flask, redirect, render_template, session, url_for, send_file, request, send_from_directory
+from flask import Flask, redirect, render_template, session, url_for, send_file, request, send_from_directory, abort
 from pathlib import Path
-import requests
-import python_avatars as pa
 import random
 import string
 import requests
 import datetime
-import re
+import os
 import json
 
-#Random API key: 947bc7666e0242bbaf55f395d41e5e9a
+import cloudmersive_convert_api_client
+from cloudmersive_convert_api_client.rest import ApiException
+
+ROBOHASH_URL = "https://robohash.org/"
+CLOUDMERSIVE_API_KEY = "d4b1a37f-5dd4-4283-8b70-5643606a1f2a"
 
 application = Flask(__name__)
-
-
+cm_cfg = cloudmersive_convert_api_client.Configuration()
+cm_cfg.api_key['Apikey'] = CLOUDMERSIVE_API_KEY
 
 @application.route("/", methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
         if request.form.get('action1') == 'Generate':
             return render_main_page()
-        if request.form.get('action3') == 'Share':
-            return 'Share'
         else:
             pass  # unknown
     elif request.method == 'GET':
         return render_main_page()
 
 
-@application.route('/download', methods=['POST'])
-def download():
-    path = './static/avatar.png'
-    return send_file(path, as_attachment=True)
+@application.route("/cache/<string:ext>/<string:robohash>")
+def cached_file(ext, robohash):
+    if ext == "png":
+        ensure_avatar_cached(robohash)
+        return send_from_directory(application.root_path + '/cache/' + ext, robohash + "." + ext)
+    if ext == "gif" or ext == "jpg" or ext == "pdf":
+        return send_converted_avatar(ext, robohash)
+    # Bad Request
+    abort(400)
 
 
-@application.route("/login")
-def login():
-    return render_template("login.html")
+def send_converted_avatar(ext, robohash):
+    converted_file_path = application.root_path + "/cache/" + ext
+    converted_file_name = robohash + "." + ext
+    if not is_cached(ext, robohash):
+        ensure_avatar_cached(robohash)
+        cm_instance = cloudmersive_convert_api_client.ConvertImageApi(cloudmersive_convert_api_client.ApiClient(cm_cfg))
+        try:
+            input_file = application.root_path + "/cache/png/" + robohash + ".png"
+            # output_format = "JPEG/JPG" if ext == "jpg" else ext.upper()
+            output_format = ext.upper()
+            api_response = cm_instance.convert_image_image_format_convert("PNG", output_format, input_file)
+            with open(converted_file_path + "/" + converted_file_name, 'wb') as f:
+                # ugly workaround
+                # see https://stackoverflow.com/questions/64938319/binary-data-gets-written-as-string-literal-how-to-convert-it-back-to-bytes)
+                f.write(api_response[2:-1].encode('latin1').decode('unicode_escape').encode('latin1'))
+                f.close()
+        except ApiException as e:
+            print("Exception when calling ConvertImageApi->convert_image_image_format_convert: %s\n" % e)
+            abort(500)
+    return send_from_directory(converted_file_path, converted_file_name)
 
 
-@application.route('/cache/<path:filename>')
-def cached_avatar(filename):
-    return send_from_directory(application.root_path + '/cache/', filename)
+def ensure_avatar_cached(robohash):
+    if not is_cached("png", robohash):
+        req = requests.get(ROBOHASH_URL + robohash + ".png")
+        with open(application.root_path + "/cache/png/" + robohash + ".png", 'wb') as f:
+            f.write(req.content)
+            f.close()
 
 
-def is_cached(name, ext):
-    return Path(application.root_path + "/cache/" + name + "." + ext).is_file()
-
-
-def download_avatar(robohash):
-    req = requests.get("https://robohash.org/" + robohash + ".png")
-    with open(application.root_path + "/cache/" + robohash + ".png", 'wb') as f:
-        f.write(req.content)
+def is_cached(ext, robohash):
+    return Path(application.root_path + "/cache/" + ext + "/" + robohash + "." + ext).is_file()
 
 
 def render_main_page():
@@ -60,16 +78,34 @@ def render_main_page():
     apiResponse = requests.get('https://randomuser.me/api/')
     data = json.loads(apiResponse.content)
     name = data["results"][0]["name"]["first"]
-    #roboName = re.sub(r'\W+', '', str(apiResponse.content))[1:]
     # generate robohash
-    # TODO: use cookie as an optional source of hash
     robohash = ''.join(random.choice(string.ascii_letters + string.digits) for a in range(16))
     # check local proxy cache first and download avatar if needed
-    if not is_cached(robohash, "png"):
-        download_avatar(robohash)
+    ensure_avatar_cached(robohash)
     # render main page, pointing to a locally cached avatar
     return render_template("avatar.html", robohash=robohash, year=datetime.date.today().year, robotName=name)
 
 
+def init_cache():
+    init_cache_subdirectory(application.root_path + "/cache/gif")
+    init_cache_subdirectory(application.root_path + "/cache/jpg")
+    init_cache_subdirectory(application.root_path + "/cache/pdf")
+    init_cache_subdirectory(application.root_path + "/cache/png")
+
+
+def init_cache_subdirectory(directory):
+    if os.path.exists(directory):
+        for file_name in os.listdir(directory):
+            file_path = os.path.join(directory, file_name)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+    else:
+        os.makedirs(directory)
+
+
 if __name__ == '__main__':
+    init_cache()
     application.run(host="0.0.0.0", port=5001)
