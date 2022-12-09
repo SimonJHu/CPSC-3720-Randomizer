@@ -15,7 +15,8 @@ Create a website where the user can click a button that will produce a random av
   - As a user, I want to be able to download an image of the randomly generated avatar, so that I can access it at a later time or upload it elsewhere. 
   - As a user, I want to be able to share the randomly generated avatar, so that I can showcase my character on social media. 
   - As a user, I want to be able to hit a button that will automatically generate my random avatar, so that I have a straightforward way of spawning a character. 
-  - As a user, I want to see a website with an intuitive interface, so that I want to continue using the avatar generator in the future. 
+  - As a user, I want to see a website with an intuitive interface, so that I want to continue using the avatar generator in the future.
+  - As a user, I want my avatar to have a generated name, so that I don't have to think of creating one myself.
 ### Contributors:
 <a href="https://github.com/SimonJHu/CPSC-3720-Randomizer/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=SimonJHu/CPSC-3720-Randomizer" />
