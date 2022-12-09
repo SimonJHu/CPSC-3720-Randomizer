@@ -7,7 +7,7 @@ Create a website where the user can click a button that will produce a random av
 + Non-Functional Requirements: 
   - The system will be coded in Python and HTML. 
   - The system will have at least 3 APIs. 
-  - The system will have to be able to run on the Web. 
+  - The system will be able to run on the Web. 
   - The system must have a GUI for the program. 
 
 + Functional Requirements: 
